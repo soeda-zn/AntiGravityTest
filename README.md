@@ -1,5 +1,12 @@
 # Pomodoro Timer App
 
+# Version 1.1.0
+GitHub Pagesへのデプロイ対応を行いました。
+
+## 変更点
+- **デプロイ設定**: `vite.config.js`にbase URLを追加しました。
+- **依存関係**: `gh-pages`パッケージを追加し、デプロイ用スクリプトを設定しました。
+
 # Version 1.0.0
 ポモドーロタイマーアプリの初期リリースです。
 
