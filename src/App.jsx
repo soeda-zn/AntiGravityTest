@@ -47,10 +47,14 @@ function App() {
                 window.speechSynthesis.speak(utterance);
             };
 
-            if (timeLeft === 600) { // 10 minutes
+            if (timeLeft === 900) { // 15 minutes
+                speak("残り15分です");
+            } else if (timeLeft === 600) { // 10 minutes
                 speak("残り10分です");
             } else if (timeLeft === 300) { // 5 minutes
                 speak("残り5分です");
+            } else if (timeLeft === 180) { // 3 minutes
+                speak("残り3分です");
             } else if (timeLeft === 60) { // 1 minute
                 speak("残り1分です");
             }
