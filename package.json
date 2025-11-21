@@ -2,6 +2,7 @@
   "name": "pomodoro-timer",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://soeda-zn.github.io/AntiGravityTest",
   "type": "module",
   "scripts": {
     "dev": "vite",
