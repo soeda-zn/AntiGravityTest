@@ -1,13 +1,42 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import TimerDisplay from './components/TimerDisplay';
 import DurationSelector from './components/DurationSelector';
 import Controls from './components/Controls';
+import AmbientSoundSelector, { sounds } from './components/AmbientSoundSelector';
 import { useTimer } from './hooks/useTimer';
 // import alarmSound from './assets/alarm.mp3'; // Placeholder
 
 function App() {
     const [selectedDuration, setSelectedDuration] = useState(25);
+    const [selectedSound, setSelectedSound] = useState('none');
     const { timeLeft, isRunning, isFinished, start, pause, reset } = useTimer(selectedDuration);
+    const audioRef = useRef(new Audio());
+
+    // Ambient Sound Effect
+    useEffect(() => {
+        const audio = audioRef.current;
+        const sound = sounds.find(s => s.id === selectedSound);
+
+        if (sound && sound.url) {
+            if (audio.src !== sound.url) {
+                audio.src = sound.url;
+                audio.loop = true;
+            }
+
+            if (isRunning) {
+                audio.play().catch(e => console.error("Ambient sound play failed", e));
+            } else {
+                audio.pause();
+            }
+        } else {
+            audio.pause();
+            audio.src = '';
+        }
+
+        return () => {
+            audio.pause();
+        };
+    }, [isRunning, selectedSound]);
 
     useEffect(() => {
         if (isFinished) {
@@ -55,6 +84,7 @@ function App() {
             <DurationSelector onSelect={handleDurationSelect} currentDuration={selectedDuration} />
             <TimerDisplay timeLeft={timeLeft} />
             <Controls isRunning={isRunning} onStart={handleStart} onPause={pause} onReset={reset} />
+            <AmbientSoundSelector currentSound={selectedSound} onSelect={setSelectedSound} />
         </div>
     );
 }
