@@ -1,7 +1,7 @@
 import React from 'react';
 
 const DurationSelector = ({ onSelect, currentDuration }) => {
-    const durations = [25, 30, 40, 50, 60];
+    const durations = [5, 10, 15, 20, 25, 30, 40, 50, 60];
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '2rem' }}>

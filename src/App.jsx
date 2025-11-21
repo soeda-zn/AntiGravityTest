@@ -38,6 +38,29 @@ function App() {
         };
     }, [isRunning, selectedSound]);
 
+    // Voice Announcements
+    useEffect(() => {
+        if (isRunning) {
+            const speak = (text) => {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ja-JP';
+                window.speechSynthesis.speak(utterance);
+            };
+
+            if (timeLeft === 900) { // 15 minutes
+                speak("残り15分です");
+            } else if (timeLeft === 600) { // 10 minutes
+                speak("残り10分です");
+            } else if (timeLeft === 300) { // 5 minutes
+                speak("残り5分です");
+            } else if (timeLeft === 180) { // 3 minutes
+                speak("残り3分です");
+            } else if (timeLeft === 60) { // 1 minute
+                speak("残り1分です");
+            }
+        }
+    }, [timeLeft, isRunning]);
+
     useEffect(() => {
         if (isFinished) {
             // Play sound
@@ -60,9 +83,6 @@ function App() {
                     }
                 });
             }
-
-            // Fallback alert for when notifications are blocked or not supported
-            // alert("Time's up!"); // Commented out to prefer notifications, or keep as backup
         }
     }, [isFinished]);
 
