@@ -12,11 +12,37 @@ function App() {
     useEffect(() => {
         if (isFinished) {
             // Play sound
-            const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg'); // Use a remote URL for now to ensure it works without local assets
+            const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
             audio.play().catch(e => console.error("Audio play failed", e));
-            alert("Time's up!");
+
+            // Send notification
+            if (Notification.permission === 'granted') {
+                new Notification("Pomodoro Timer", {
+                    body: "Time's up! Take a break.",
+                    icon: "/vite.svg" // Optional: use app icon
+                });
+            } else if (Notification.permission !== 'denied') {
+                // Fallback if permission wasn't asked/granted yet, though we try to ask on start
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        new Notification("Pomodoro Timer", {
+                            body: "Time's up! Take a break."
+                        });
+                    }
+                });
+            }
+
+            // Fallback alert for when notifications are blocked or not supported
+            // alert("Time's up!"); // Commented out to prefer notifications, or keep as backup
         }
     }, [isFinished]);
+
+    const handleStart = () => {
+        if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+            Notification.requestPermission();
+        }
+        start();
+    };
 
     const handleDurationSelect = (duration) => {
         setSelectedDuration(duration);
@@ -28,7 +54,7 @@ function App() {
             <h1>Pomodoro Timer</h1>
             <DurationSelector onSelect={handleDurationSelect} currentDuration={selectedDuration} />
             <TimerDisplay timeLeft={timeLeft} />
-            <Controls isRunning={isRunning} onStart={start} onPause={pause} onReset={reset} />
+            <Controls isRunning={isRunning} onStart={handleStart} onPause={pause} onReset={reset} />
         </div>
     );
 }
